@@ -25,6 +25,7 @@ func GenerateBarcodeList(wg *sync.WaitGroup, product product.Product) {
 	scaledBarcode, err := barcode.Scale(barcodeCode, 200, 80)
 	if err != nil {
 		fmt.Println("Error scaling barcode:", err)
+		return
 	}
 
 	assetsDir := "assets"
@@ -42,12 +43,14 @@ func GenerateBarcodeList(wg *sync.WaitGroup, product product.Product) {
 	file, err := os.Create(filepath)
 	if err != nil {
 		fmt.Println("Error creating file:", err)
+		return
 	}
 	defer file.Close()
 
 	err = png.Encode(file, scaledBarcode)
 	if err != nil {
 		fmt.Println("Error encoding PNG image:", err)
+		return
 	}
 
 	fmt.Printf("Barcode for %s generated successfully: %s\n", product.ProductID, barcodeCodeName)
