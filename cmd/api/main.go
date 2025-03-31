@@ -8,6 +8,7 @@ import (
 	"os"
 	"sync"
 
+	"github.com/redmejia/bos/cmd/api/handlers"
 	"github.com/redmejia/bos/cmd/api/router"
 	"github.com/redmejia/bos/internal/models/product"
 	"github.com/redmejia/bos/internal/utils/barcode"
@@ -15,8 +16,10 @@ import (
 
 func main() {
 
-	var port string
-	var host string
+	var (
+		port string
+		host string
+	)
 	defaultPort := "8080"
 	defaultHost := "localhost"
 	flag.StringVar(&port, "port", defaultPort, "server port")
@@ -52,12 +55,14 @@ func main() {
 		wg.Add(1)
 		go barcode.GenerateBarcodeList(&wg, product)
 	}
+
 	wg.Wait()
 
-	app := &router.App{
-		Port:     fmt.Sprintf(":%s", port),
-		Info:     log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime),
-		ErrorLog: log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile),
+	app := &handlers.App{
+		Port:        fmt.Sprintf(":%s", port),
+		Info:        log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime),
+		ErrorLog:    log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile),
+		ProductList: productList,
 	}
 
 	srv := &http.Server{

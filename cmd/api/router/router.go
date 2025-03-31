@@ -2,9 +2,12 @@ package router
 
 import (
 	"net/http"
+
+	"github.com/redmejia/bos/cmd/api/handlers"
 )
 
-func Router(app *App) http.Handler {
+func Router(app *handlers.App) http.Handler {
+
 	mux := http.NewServeMux()
 
 	var fs = http.FileServer(http.Dir("assets/"))
