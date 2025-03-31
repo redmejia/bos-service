@@ -1,8 +1,12 @@
 package main
 
 import (
+	"log"
+	"net/http"
+	"os"
 	"sync"
 
+	"github.com/redmejia/bos/cmd/api/router"
 	"github.com/redmejia/bos/internal/models/product"
 	"github.com/redmejia/bos/internal/utils/barcode"
 )
@@ -39,5 +43,23 @@ func main() {
 		go barcode.GenerateBarcodeList(&wg, product)
 	}
 	wg.Wait()
+
+	app := &router.App{
+		Port:     ":8080",
+		Info:     log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime),
+		ErrorLog: log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile),
+	}
+
+	srv := &http.Server{
+		Addr:     app.Port,
+		ErrorLog: app.ErrorLog,
+		Handler:  router.Router(app),
+	}
+
+	app.Info.Printf("Starting server on %s", app.Port)
+
+	if err := srv.ListenAndServe(); err != nil {
+		app.ErrorLog.Fatalf("Error starting server: %s", err)
+	}
 
 }
