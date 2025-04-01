@@ -1,1 +1,4 @@
 cmd/api/assets/
+cmd/api/dist/
+
+cmd/views/
