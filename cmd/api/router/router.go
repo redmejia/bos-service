@@ -13,8 +13,7 @@ func Router(app *handlers.App) http.Handler {
 	var fs = http.FileServer(http.Dir("assets/"))
 	mux.Handle("/assets/", http.StripPrefix("/assets/", fs))
 
-	// mux.HandleFunc("/", app.HealthCheckHandler)
-	// mux.HandleFunc("/profiles", app.ProfileHandler)
+	mux.HandleFunc("/api/v1/products", app.ProductHandler)
 
 	return mux
 }
