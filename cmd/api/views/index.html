@@ -28,15 +28,19 @@
             margin-top: 10px;
             margin-bottom: 10px;
         }
-
+        .product {
+            margin-bottom: 25rem;
+        }
     </style>
 </head>
 
 <body>
     <h1>The Store </h1>
     {{ range .products }}
+    <div class="product">
     <li class="list-item">{{ .Name }} - ${{ .Price }}</li>
-    <img src="{{ .BarcodeImage }}" alt="{{ .ProductID }}">
+        <img src="{{ .BarcodeImage }}" alt="{{ .ProductID }}">
+    </div>
     {{ else }}
     <li>No products available</li>
     {{ end }}
