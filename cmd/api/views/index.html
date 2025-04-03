@@ -22,6 +22,7 @@
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+
         img {
             width: 300px;
             height: 150px;
@@ -29,14 +30,21 @@
             margin-bottom: 10px;
         }
 
+        .product {
+            margin-bottom: 27rem;
+        }
     </style>
 </head>
 
 <body>
     <h1>The Store </h1>
     {{ range .products }}
-    <li class="list-item">{{ .Name }} - ${{ .Price }}</li>
-    <img src="{{ .BarcodeImage }}" alt="{{ .ProductID }}">
+    <div class="product">
+        <li class="list-item">{{ .Name }} - ${{ .Price }}</li>
+        <img src="{{ .ProductImage }}" alt="{{ .ProductID }}">
+        <br/>
+        <img src="{{ .BarcodeImage }}" alt="{{ .ProductID }}">
+    </div>
     {{ else }}
     <li>No products available</li>
     {{ end }}
