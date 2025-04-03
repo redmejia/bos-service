@@ -46,6 +46,8 @@ func main() {
 
 	wg.Wait()
 
+	fmt.Println(productList)
+
 	tmpl := template.Must(template.ParseGlob("views/*.html"))
 
 	app := &handlers.App{

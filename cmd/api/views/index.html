@@ -22,14 +22,16 @@
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+
         img {
             width: 300px;
             height: 150px;
             margin-top: 10px;
             margin-bottom: 10px;
         }
+
         .product {
-            margin-bottom: 25rem;
+            margin-bottom: 27rem;
         }
     </style>
 </head>
@@ -38,7 +40,9 @@
     <h1>The Store </h1>
     {{ range .products }}
     <div class="product">
-    <li class="list-item">{{ .Name }} - ${{ .Price }}</li>
+        <li class="list-item">{{ .Name }} - ${{ .Price }}</li>
+        <img src="{{ .ProductImage }}" alt="{{ .ProductID }}">
+        <br/>
         <img src="{{ .BarcodeImage }}" alt="{{ .ProductID }}">
     </div>
     {{ else }}
