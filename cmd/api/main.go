@@ -30,12 +30,12 @@ func main() {
 	var wg sync.WaitGroup
 
 	productList := []product.Product{
-		{ProductID: "PROD-001", Name: "Product 1", Price: 10.00, ProductImage: fmt.Sprintf("http://%s:8080/assets/products/PROD-001.png", host), BarcodeImage: fmt.Sprintf("http://%s:8080/assets/PROD-001.png", host)},
-		{ProductID: "PROD-002", Name: "Product 2", Price: 20.00, ProductImage: fmt.Sprintf("http://%s:8080/assets/products/PROD-002.png", host), BarcodeImage: fmt.Sprintf("http://%s:8080/assets/PROD-002.png", host)},
-		{ProductID: "PROD-003", Name: "Product 3", Price: 30.00, ProductImage: fmt.Sprintf("http://%s:8080/assets/products/PROD-003.png", host), BarcodeImage: fmt.Sprintf("http://%s:8080/assets/PROD-003.png", host)},
-		{ProductID: "PROD-004", Name: "Product 4", Price: 40.00, ProductImage: fmt.Sprintf("http://%s:8080/assets/products/PROD-004.png", host), BarcodeImage: fmt.Sprintf("http://%s:8080/assets/PROD-004.png", host)},
-		{ProductID: "PROD-005", Name: "Product 5", Price: 50.00, ProductImage: fmt.Sprintf("http://%s:8080/assets/products/PROD-005.png", host), BarcodeImage: fmt.Sprintf("http://%s:8080/assets/PROD-005.png", host)},
-		{ProductID: "PROD-006", Name: "Product 6", Price: 60.00, ProductImage: fmt.Sprintf("http://%s:8080/assets/products/PROD-006.png", host), BarcodeImage: fmt.Sprintf("http://%s:8080/assets/PROD-006.png", host)},
+		{ProductID: "PROD-001", Name: "Product 1", Price: 10.10 * 100, ProductImage: fmt.Sprintf("http://%s:8080/assets/products/PROD-001.png", host), BarcodeImage: fmt.Sprintf("http://%s:8080/assets/PROD-001.png", host)},
+		{ProductID: "PROD-002", Name: "Product 2", Price: 20.12 * 100, ProductImage: fmt.Sprintf("http://%s:8080/assets/products/PROD-002.png", host), BarcodeImage: fmt.Sprintf("http://%s:8080/assets/PROD-002.png", host)},
+		{ProductID: "PROD-003", Name: "Product 3", Price: 30.50 * 100, ProductImage: fmt.Sprintf("http://%s:8080/assets/products/PROD-003.png", host), BarcodeImage: fmt.Sprintf("http://%s:8080/assets/PROD-003.png", host)},
+		{ProductID: "PROD-004", Name: "Product 4", Price: 40.30 * 100, ProductImage: fmt.Sprintf("http://%s:8080/assets/products/PROD-004.png", host), BarcodeImage: fmt.Sprintf("http://%s:8080/assets/PROD-004.png", host)},
+		{ProductID: "PROD-005", Name: "Product 5", Price: 50.43 * 100, ProductImage: fmt.Sprintf("http://%s:8080/assets/products/PROD-005.png", host), BarcodeImage: fmt.Sprintf("http://%s:8080/assets/PROD-005.png", host)},
+		{ProductID: "PROD-006", Name: "Product 6", Price: 60.44 * 100, ProductImage: fmt.Sprintf("http://%s:8080/assets/products/PROD-006.png", host), BarcodeImage: fmt.Sprintf("http://%s:8080/assets/PROD-006.png", host)},
 		// ... add more here
 	}
 
