@@ -13,18 +13,23 @@ import (
 	"github.com/redmejia/bos/cmd/api/router"
 	"github.com/redmejia/bos/internal/models/product"
 	"github.com/redmejia/bos/internal/utils/barcode"
+	"github.com/redmejia/bos/internal/utils/security/jwt"
 )
 
 func main() {
 
 	var (
-		port string
-		host string
+		port   string
+		host   string
+		jwtKey string
+		issuer string
 	)
 	defaultPort := "8080"
 	defaultHost := "localhost"
 	flag.StringVar(&port, "port", defaultPort, "server port")
 	flag.StringVar(&host, "host", defaultHost, "hostname")
+	flag.StringVar(&jwtKey, "key", "", "JWT key")
+	flag.StringVar(&issuer, "iss", "", "Issuer")
 	flag.Parse()
 
 	var wg sync.WaitGroup
@@ -46,14 +51,21 @@ func main() {
 
 	wg.Wait()
 
-	fmt.Println(productList)
+	token, err := jwt.GenerateToke(jwtKey, issuer)
+	if err != nil {
+		log.Fatalf("Error generating token: %s", err)
+	}
+
+	log.Println("Token: ", token)
 
 	tmpl := template.Must(template.ParseGlob("views/*.html"))
 
 	app := &handlers.App{
-		Port:        fmt.Sprintf(":%s", port),
-		Info:        log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime),
-		ErrorLog:    log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile),
+		Port:     fmt.Sprintf(":%s", port),
+		Info:     log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime),
+		ErrorLog: log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile),
+		// JWTKey:   jwtKey,
+		// Issuer:      issuer,
 		ProductList: productList,
 		Template:    tmpl,
 	}
