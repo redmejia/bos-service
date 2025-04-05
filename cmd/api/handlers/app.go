@@ -12,6 +12,8 @@ type App struct {
 	Host           string
 	Port           string
 	Info, ErrorLog *log.Logger
+	JWTKey         string
+	// Issuer         string
 	// Wg             *sync.WaitGroup
 	ProductList []product.Product // This is a list of products, right now only in memory but this could be a database
 	Template    *template.Template

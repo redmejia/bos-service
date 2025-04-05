@@ -13,18 +13,23 @@ import (
 	"github.com/redmejia/bos/cmd/api/router"
 	"github.com/redmejia/bos/internal/models/product"
 	"github.com/redmejia/bos/internal/utils/barcode"
+	"github.com/redmejia/bos/internal/utils/security/jwt"
 )
 
 func main() {
 
 	var (
-		port string
-		host string
+		port   string
+		host   string
+		jwtKey string
+		issuer string
 	)
 	defaultPort := "8080"
 	defaultHost := "localhost"
 	flag.StringVar(&port, "port", defaultPort, "server port")
 	flag.StringVar(&host, "host", defaultHost, "hostname")
+	flag.StringVar(&jwtKey, "key", "", "JWT key")
+	flag.StringVar(&issuer, "iss", "", "Issuer")
 	flag.Parse()
 
 	var wg sync.WaitGroup
@@ -43,17 +48,30 @@ func main() {
 		wg.Add(1)
 		go barcode.GenerateBarcodeList(&wg, product)
 	}
+	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	errorLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+
+	infoLog.Println("Barcodes generated successfully")
 
 	wg.Wait()
 
-	fmt.Println(productList)
+	token, err := jwt.GenerateToken(jwtKey, issuer)
+
+	if err != nil {
+		errorLog.Fatalf("Error generating token: %s", err)
+
+	}
+
+	infoLog.Println("Token: ", token)
 
 	tmpl := template.Must(template.ParseGlob("views/*.html"))
 
 	app := &handlers.App{
-		Port:        fmt.Sprintf(":%s", port),
-		Info:        log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime),
-		ErrorLog:    log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile),
+		Port:     fmt.Sprintf(":%s", port),
+		Info:     infoLog,
+		ErrorLog: errorLog,
+		JWTKey:   jwtKey,
+		// Issuer:      issuer,
 		ProductList: productList,
 		Template:    tmpl,
 	}
@@ -64,7 +82,7 @@ func main() {
 		Handler:  router.Router(app),
 	}
 
-	app.Info.Printf("Starting server on %s", app.Port)
+	infoLog.Printf("Starting server on %s\n", app.Port)
 
 	if err := srv.ListenAndServe(); err != nil {
 		app.ErrorLog.Fatalf("Error starting server: %s", err)

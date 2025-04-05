@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/redmejia/bos/cmd/api/handlers"
+	"github.com/redmejia/bos/cmd/api/middleware"
 )
 
 func Router(app *handlers.App) http.Handler {
@@ -14,7 +15,7 @@ func Router(app *handlers.App) http.Handler {
 	mux.Handle("/assets/", http.StripPrefix("/assets/", fs))
 
 	mux.HandleFunc("/api/v1/products", app.ProductsHandler)
-	mux.HandleFunc("/api/v1/product", app.ProductHandler)
+	mux.HandleFunc("/api/v1/product", middleware.IsAuthorized(app, app.ProductHandler))
 
-	return mux
+	return middleware.Logger(mux)
 }
