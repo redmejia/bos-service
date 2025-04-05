@@ -53,6 +53,6 @@ func GenerateBarcodeList(wg *sync.WaitGroup, product product.Product) {
 		return
 	}
 
-	fmt.Printf("Barcode for %s generated successfully: %s\n", product.ProductID, barcodeCodeName)
+	// fmt.Printf("Barcode for %s generated successfully: %s\n", product.ProductID, barcodeCodeName)
 
 }

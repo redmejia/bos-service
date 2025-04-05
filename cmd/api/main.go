@@ -48,33 +48,28 @@ func main() {
 		wg.Add(1)
 		go barcode.GenerateBarcodeList(&wg, product)
 	}
+	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	errorLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+
+	infoLog.Println("Barcodes generated successfully")
 
 	wg.Wait()
 
 	token, err := jwt.GenerateToken(jwtKey, issuer)
 
 	if err != nil {
-		log.Fatalf("Error generating token: %s", err)
+		errorLog.Fatalf("Error generating token: %s", err)
 
 	}
 
-	log.Println("Token: ", token)
-
-	log.Println("Verufying token")
-
-	isValid, claims, err := jwt.VerifyToken(token, jwtKey)
-	if err != nil {
-		log.Fatalf("Error verifying token: %s", err)
-	}
-
-	log.Println("Claims: ", isValid, claims)
+	infoLog.Println("Token: ", token)
 
 	tmpl := template.Must(template.ParseGlob("views/*.html"))
 
 	app := &handlers.App{
 		Port:     fmt.Sprintf(":%s", port),
-		Info:     log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime),
-		ErrorLog: log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile),
+		Info:     infoLog,
+		ErrorLog: errorLog,
 		JWTKey:   jwtKey,
 		// Issuer:      issuer,
 		ProductList: productList,
@@ -87,7 +82,7 @@ func main() {
 		Handler:  router.Router(app),
 	}
 
-	app.Info.Printf("Starting server on %s", app.Port)
+	infoLog.Printf("Starting server on %s\n", app.Port)
 
 	if err := srv.ListenAndServe(); err != nil {
 		app.ErrorLog.Fatalf("Error starting server: %s", err)
