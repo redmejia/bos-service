@@ -51,12 +51,23 @@ func main() {
 
 	wg.Wait()
 
-	token, err := jwt.GenerateToke(jwtKey, issuer)
+	token, err := jwt.GenerateToken(jwtKey, issuer)
+
 	if err != nil {
 		log.Fatalf("Error generating token: %s", err)
+
 	}
 
 	log.Println("Token: ", token)
+
+	log.Println("Verufying token")
+
+	isValid, claims, err := jwt.VerifyToken(token, jwtKey)
+	if err != nil {
+		log.Fatalf("Error verifying token: %s", err)
+	}
+
+	log.Println("Claims: ", isValid, claims)
 
 	tmpl := template.Must(template.ParseGlob("views/*.html"))
 
