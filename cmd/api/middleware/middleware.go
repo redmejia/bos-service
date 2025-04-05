@@ -22,9 +22,11 @@ func IsAuthorized(app *handlers.App, next http.HandlerFunc) http.HandlerFunc {
 			token := strings.Split(autorization, " ")
 			isValid, _, err := sec.VerifyToken(token[1], app.JWTKey)
 
-			w.Header().Add("Content-Type", "application/json")
-			w.WriteHeader(http.StatusUnauthorized)
 			if err != nil {
+
+				w.Header().Add("Content-Type", "application/json")
+				w.WriteHeader(http.StatusUnauthorized)
+
 				if errors.Is(err, jwt.ErrTokenExpired) {
 					json.NewEncoder(w).Encode(map[string]string{"error": "Session expired"})
 				} else if errors.Is(err, jwt.ErrTokenMalformed) {
@@ -41,7 +43,6 @@ func IsAuthorized(app *handlers.App, next http.HandlerFunc) http.HandlerFunc {
 			w.Header().Add("Content-Type", "application/json")
 			w.WriteHeader(http.StatusUnauthorized)
 			json.NewEncoder(w).Encode(map[string]string{"error": "Forbidden"})
-			app.ErrorLog.Println("No authorization header")
 		}
 	})
 }
