@@ -23,31 +23,47 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
-        img {
-            width: 300px;
-            height: 150px;
-            margin-top: 10px;
-            margin-bottom: 10px;
+        .product-image {
+            width: 200px;
+            height: auto;
+            margin-top: 20px;
+            margin-bottom: 30px;
         }
 
-        .product {
-            margin-bottom: 27rem;
+        .barcode-image {
+            width: 300px;
+            height: 150px;
+            margin-top: 35px;
+            margin-bottom: 75px;
         }
+
+        /* .product {
+            margin-bottom: 27rem;
+        } */
     </style>
 </head>
 
 <body>
     <h1>The Store </h1>
-    {{ range .products }}
-    <div class="product">
-        <li class="list-item">{{ .Name }} - ${{ .Price }}</li>
-        <img src="{{ .ProductImage }}" alt="{{ .ProductID }}">
-        <br/>
-        <img src="{{ .BarcodeImage }}" alt="{{ .ProductID }}">
+    <div class="row">
+        {{ range .products }}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 text-center">
+                <li class="list-item text-center">{{ .Name }} - ${{ .Price }}</li>
+                <div class="col-md-6 mx-auto d-flex flex-column justify-content-center align-items-center">
+                    <img class="product-image" src="{{ .ProductImage }}" alt="{{ .ProductID }}">
+                    <br />
+                    <img class="barcode-image" src="{{ .BarcodeImage }}" alt="{{ .ProductID }}">
+                </div>
+            </div>
+        </div>
+        {{ else }}
+        <div class="col-12">
+            <p>No products available</p>
+        </div>
+        {{ end }}
     </div>
-    {{ else }}
-    <li>No products available</li>
-    {{ end }}
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
