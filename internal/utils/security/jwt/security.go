@@ -22,7 +22,7 @@ func GenerateToken(jwtKey string, businessName string) (string, error) {
 			ExpiresAt: jwt.NewNumericDate(exp),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 			NotBefore: jwt.NewNumericDate(time.Now()),
-			Issuer:    "bos",
+			Issuer:    "", // app name
 		},
 	}
 
